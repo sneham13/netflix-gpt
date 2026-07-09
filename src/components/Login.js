@@ -1,8 +1,12 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import checkValidData from "../utils/validate";
 import { auth } from "../utils/firebase";
@@ -10,7 +14,9 @@ import { auth } from "../utils/firebase";
 const Login = () => {
   const [isSignIn, setSignIn] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-  const navigate=useNavigate();
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
@@ -37,8 +43,20 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-          console.log(user);
-          navigate("/browse");
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMPU5gJUj46ufL6FQfX3XvM7lR7qtcMy63tuj2siLuUQ&s=10",
+          }).then(() => {
+            console.log(user);
+            const { uid, email, displayName } = auth.currentUser;
+
+            dispatch(
+              addUser({ uid: uid, email: email, displayName: displayName }),
+            );
+
+            navigate("/browse");
+          });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -46,16 +64,18 @@ const Login = () => {
           console.log(errorCode, errorMessage);
         });
     } else {
-      signInWithEmailAndPassword( auth,
+      signInWithEmailAndPassword(
+        auth,
         email.current.value,
-        password.current.value,).then(
-        (userCredential) => {
+        password.current.value,
+      )
+        .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
           console.log(user);
-          navigate("/");
-        },
-      ).catch((error) => {
+          navigate("/browse");
+        })
+        .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode, errorMessage);

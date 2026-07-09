@@ -1,12 +1,10 @@
 import Header from "./Header";
-import Login from "./Login";
-
 
 const Browse=()=>{
     return (
         <div>
             <Header/>
-            <Login/>
+            <h1 className="text-white">Browse Page</h1>
         </div>
     )
 }

@@ -16,6 +16,7 @@ const Body = () => {
     },
   ]);
 
+  
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
