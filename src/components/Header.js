@@ -1,4 +1,19 @@
+import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
+
+  const navigate = useNavigate();
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      navigate("/");
+    }).catch((error) => {
+      console.error("Error signing out:", error);
+      navigate("/error");
+    });
+  };
+
   return (
     <div className="relative w-full">
       <img
@@ -13,6 +28,12 @@ const Header = () => {
           alt="logo"
           className="w-44"
         ></img>
+
+<div className="flex p-2">
+    <img classname="w-12 h-12" alt="userProfile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMPU5gJUj46ufL6FQfX3XvM7lR7qtcMy63tuj2siLuUQ&s=10"></img>
+        
+      <button onClick={handleSignOut}>Sign Out</button>
+      </div>
       </div>
     </div>
   );

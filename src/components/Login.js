@@ -1,10 +1,17 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import checkValidData from "../utils/validate";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isSignIn, setSignIn] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-
+  const navigate=useNavigate();
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
 
@@ -17,10 +24,52 @@ const Login = () => {
     setErrorMsg(isValid);
     console.log(email.current.value);
     console.log(password.current.value);
+
+    if (isValid) return;
+
+    if (!isSignIn) {
+      //Sign up logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+          navigate("/browse");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+    } else {
+      signInWithEmailAndPassword( auth,
+        email.current.value,
+        password.current.value,).then(
+        (userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+          navigate("/");
+        },
+      ).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+    }
   };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center">
+      <img
+        src="https://assets.nflxext.com/ffe/siteui/vlv3/eaa165a3-80a7-44cb-8df6-be1a7e225369/web/IN-en-20260706-TRIFECTA-perspective_2f2fae68-6962-4d52-8cc2-1fe6ef5c6a56_large.jpg"
+        alt="background"
+        className="absolute inset-0 w-full h-full object-cover -z-10"
+      />
       <form className="flex flex-col w-80 gap-3 p-8 rounded bg-black/80">
         <h1 className="text-2xl font-bold text-white mb-1">
           {isSignIn ? "Sign In" : "Sign Up"}
@@ -29,6 +78,7 @@ const Login = () => {
           <input
             type="text"
             placeholder="Full Name"
+            ref={name}
             className="p-2.5 rounded bg-zinc-700 text-white placeholder-zinc-400 outline-none focus:ring-2 focus:ring-white"
           ></input>
         )}
@@ -48,7 +98,7 @@ const Login = () => {
 
         <p className="text-red-500">{errorMsg}</p>
         <button
-          type="submit"
+          type="button"
           onClick={handleBtnClick}
           className="p-2.5 mt-1 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors"
         >
