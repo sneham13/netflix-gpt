@@ -15,6 +15,8 @@ export const api_options=
     }
 };
 
+export const imgcdnUrl= "https://image.tmdb.org/t/p/w500";
+
 
 
 
