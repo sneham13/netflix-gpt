@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-
+import {photoUrl} from "../utils/constants";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -28,9 +28,7 @@ const Login = () => {
   const handleBtnClick = () => {
     const isValid = checkValidData(email.current.value, password.current.value);
     setErrorMsg(isValid);
-    console.log(email.current.value);
-    console.log(password.current.value);
-
+ 
     if (isValid) return;
 
     if (!isSignIn) {
@@ -46,9 +44,8 @@ const Login = () => {
           updateProfile(user, {
             displayName: name.current.value,
             photoURL:
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMPU5gJUj46ufL6FQfX3XvM7lR7qtcMy63tuj2siLuUQ&s=10",
+              photoUrl,
           }).then(() => {
-            console.log(user);
             const { uid, email, displayName } = auth.currentUser;
 
             dispatch(
@@ -61,7 +58,6 @@ const Login = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode, errorMessage);
         });
     } else {
       signInWithEmailAndPassword(
@@ -72,13 +68,11 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
           navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorCode, errorMessage);
         });
     }
   };
