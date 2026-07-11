@@ -11,10 +11,10 @@ const MainContainer = () => {
 
 
     return (
-        <>
-            <VideoTitle title={original_title} overview={overview}/>
+        <div className="relative w-full">
             <Videobg movieId={id}/>
-        </>
+            <VideoTitle title={original_title} overview={overview}/>
+        </div>
     );
 };
 

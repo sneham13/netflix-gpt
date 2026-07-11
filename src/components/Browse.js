@@ -15,7 +15,7 @@ const Browse=()=>{
   
 
     return (
-        <div>
+        <div className="bg-black min-h-screen">
             <Header/>
             {showGptSearch ? (<GptSearch/>) :   (
            <>
@@ -23,7 +23,7 @@ const Browse=()=>{
             <SecondaryContainer/>
             </>
         ) }
-           
+
         </div>
     )
 }

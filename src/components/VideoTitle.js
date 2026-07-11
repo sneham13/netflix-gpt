@@ -1,6 +1,6 @@
 const VideoTitle=({title,overview})=>{
 return (
-<div className="w-full px-8 py-24 md:py-32 bg-linear-to-b from-black via-black/70 to-transparent absolute flex flex-col gap-4">
+<div className="w-full px-8 py-24 md:py-32 bg-linear-to-b from-black via-black/70 to-transparent absolute top-0 left-0 flex flex-col gap-4">
   <h1 className="text-3xl md:text-5xl font-bold text-white max-w-lg">{title}</h1>
   <p className="text-sm md:text-base text-zinc-300 max-w-md line-clamp-3">{overview}</p>
 

@@ -19,5 +19,7 @@ export const imgcdnUrl= "https://image.tmdb.org/t/p/w500";
 
 
 
+export const open_api_key=process.env.REACT_APP_OPENAI_API_KEY;
 
+export const gemini_api_key=process.env.REACT_APP_GEMINI_API_KEY;
 //cd2f1dc296c09f0159a32bbee94f5605

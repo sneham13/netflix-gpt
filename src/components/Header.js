@@ -4,7 +4,7 @@ import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
-import { toggleStateView } from "../utils/gptSlice"
+import { toggleStateView, resetGptView } from "../utils/gptSlice"
 
 import { logo } from "../utils/constants";
 const Header = () => {
@@ -31,7 +31,8 @@ const Header = () => {
       navigate("/browse");
       } else {
         dispatch(removeUser());
-              navigate("/");
+        dispatch(resetGptView());
+        navigate("/");
 
       }
     });
@@ -40,19 +41,14 @@ const Header = () => {
   }, [dispatch]);
 
   const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("Error signing out:", error);
-        navigate("/error");
-      });
+    signOut(auth).catch((error) => {
+      console.error("Error signing out:", error);
+    });
   };
 
   return (
-    <div className="relative w-full">
-      <div className="px-8 py-2 bg-black w-full flex justify-between items-center">
+    <div className="fixed top-0 left-0 z-20 w-full bg-linear-to-b from-black/90 via-black/60 to-transparent">
+      <div className="px-8 py-4 w-full flex justify-between items-center">
 
         <img
           src={logo}
@@ -66,7 +62,7 @@ const Header = () => {
           onClick={handleGptSearch}
           type="button"
         >
-        { showGptSearch? "GPT Search" : "Home Page" } 
+        { showGptSearch? "Home Page":"GPT Search" } 
         </button>
 
           <img
@@ -74,7 +70,11 @@ const Header = () => {
             alt="userProfile"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMPU5gJUj46ufL6FQfX3XvM7lR7qtcMy63tuj2siLuUQ&s=10"
           ></img>
-          <button onClick={handleSignOut} className="text-white font-semibold">
+          <button
+            onClick={handleSignOut}
+            type="button"
+            className="px-4 py-2 rounded text-white font-semibold border border-zinc-500 hover:bg-white/10 transition-colors"
+          >
             Sign Out
           </button>
         </div>

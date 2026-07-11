@@ -1,10 +1,28 @@
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { api_options } from "../utils/constants";
+import { addSearchResults } from "../utils/gptSlice";
 
 const GptSearchBar = () => {
   const searchText = useRef(null);
+  const dispatch = useDispatch();
 
-  const handleGptSearchClick = () => {
-    console.log(searchText.current.value);
+  const handleGptSearchClick = async () => {
+    const query = searchText.current.value;
+
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}`,
+      api_options,
+    );
+
+    const data = await response.json();
+
+    if (data.success === false) {
+      console.error(data.status_message);
+      return;
+    }
+
+    dispatch(addSearchResults(data.results));
   };
 
   return (
