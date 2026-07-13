@@ -1,9 +1,12 @@
+import { useMemo } from "react";
 import MovieCard from "./MovieCard";
 
 const MovieList = ({ title, movies }) => {
-  if (!movies || movies.length === 0) return null;
+  const moviesWithPosters = useMemo(
+    () => (movies ?? []).filter((movie) => movie.poster_path),
+    [movies],
+  );
 
-  const moviesWithPosters = movies.filter((movie) => movie.poster_path);
   if (moviesWithPosters.length === 0) return null;
 
   return (
